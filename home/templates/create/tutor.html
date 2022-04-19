@@ -1,0 +1,65 @@
+{% extends 'main/base.html' %}
+
+{% load widget_tweaks %}
+{% load rest_framework %}
+{% load crispy_forms_tags %}
+
+{% block title %}Создание нового преподавателя{% endblock %}
+
+{% block content %}
+{% if error_list %}
+<div class="alert alert-danger mt-4" role="alert">
+    <div>Обратите внимание:</div>
+    {% if count > 1 %}
+        <ol>
+    {% endif %}
+    {% for error_msg in error_list %}
+        {% if count > 1 %}<li>{{ error_msg }}</li>
+        {% else %} <div>{{ error_msg }}</div>
+        {% endif %}
+    {% endfor %}
+    {% if count > 1 %}</ol>{% endif %}
+</div>
+{% endif %}
+<form method="post" action="/create/tutor/" class="form-group">
+    {% csrf_token %}
+    <div class="card mb-4">
+        <div class="card-header text-warning bg-info">Хотите добавить нового преподавателя? Вперед!</div>
+        <div class="card-body">
+            <div class="row gx-3 mb-3">
+                <div class="col-md-4">
+                    {{ form.name|as_crispy_field }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.middle_name|as_crispy_field }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.surname|as_crispy_field }}
+                </div>
+            </div>
+            <div class="row gx-3 mb-3">
+                <div class="col-md-4">
+                    <div>{{ form.date_of_birth|as_crispy_field }}</div>
+                </div>
+                <div class="col-md-4">
+                    <div>{{ form.job_exp|as_crispy_field }}</div>
+                </div>
+                <div class="col-md-4">
+                    <div>{{ form.user_choice|as_crispy_field}}</div>
+                </div>
+            </div>
+            <div class="row gx-3 mb-3">
+                <div class="col-md-6">
+                    <div>{{ form.academ|as_crispy_field }}</div>
+                </div>
+                <div class="col-md-6">
+                    <div>{{ form.job|as_crispy_field }}</div>
+                </div>
+            </div>
+            <div class="input-group-prepend d-flex justify-content-between"> 
+                <button type="submit", name="save", class="btn btn-success">Создать нового преподавателя</button>
+                <input type="button", onclick="history.back();", class="btn btn-warning ml-4", value="Назад">
+            </div>
+        </div>
+</form>
+{% endblock %}

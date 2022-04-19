@@ -1,0 +1,47 @@
+{% extends "main/base.html" %}
+{% load rest_framework %}
+
+{% block title %}Учебная нагрузка{% endblock %}
+
+{% block content %}
+    {% if user.is_superuser %}
+        <h1>Общая учебная нагрузка:</h1>
+    {% else %}
+        <h1>Моя учебная нагрузка:</h1>
+    {% endif %}
+    <div class="input-group mb-3">
+    {% if work %}    
+        {% for one in work %}
+            <div class="card w-100 mt-2 mb-2">
+                <div class="card-header bg-info d-flex justify-content-between">
+                    <div class="text-white">
+                        Информация
+                    </div>
+                    {% if user.is_superuser %}
+                        <form action="{% url 'home:deleteWork' one.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-close" aria-label="Close"></button>
+                        </form>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                  <h4 class="card-title">{{one.teacher.last_name}} {{one.teacher.first_name}} {{one.teacher.middle_name}}</h4>
+                  <p style="font-size: 12px;">{{ one.teacher.academic_degree.name }}, {{ one.teacher.teacher_job.name }}</p>
+                  <p class="card-text">Предмет: {{one.subject}}</p>
+                  <p class="card-text">Вид занятия: {{one.sub_type}}</p>
+                  <p class="card-text">Группа: {{one.group}}</p>
+                </div>
+            </div>    
+        {% endfor %}
+    {% else %}
+        {% if user.is_superuser %}
+            <p>Ни у кого из преподавателей нет учебной нагрзуки. Назначьте, пожалуйста.</p>
+        {% else %}
+            <p>На данный момент у Вас нет учебной нагрузки.</p>
+        {% endif %}
+    {% endif %}
+    </div>
+    {% if user.is_superuser %}
+        <input type="button", onclick="window.location.href='{% url 'home:createWork' %}'", class="btn btn-primary", value="Дать учебную нагрузку">
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends 'main/base.html' %}
+
+{% load widget_tweaks %}
+{% load rest_framework %}
+
+{% block title %}Учебная нагрузка{% endblock %}
+
+{% block content %} 
+{% if error_list %}
+<div class="alert alert-danger mt-4" role="alert">
+    <div>Обратите внимание:</div>
+    {% if count > 1 %}
+        <ol>
+    {% endif %}
+    {% for error_msg in error_list %}
+        {% if count > 1 %}<li>{{ error_msg }}</li>
+        {% else %} <div>{{ error_msg }}</div>
+        {% endif %}
+    {% endfor %}
+    {% if count > 1 %}</ol>{% endif %}
+</div>
+{% endif %}
+<form method="post" action="/create/study_work/" class="form-group">
+    {% csrf_token %}
+    <div class="card mb-4">
+        <div class="card-header text-warning bg-info">Назначение учебной нагрузки</div>
+        <div class="card-body">
+            <div class="mb-3">
+                <label class="small mb-1" for="inputEmailAddress">Преподаватель</label>
+                {{ form.cur_teacher }}
+            </div>
+            <div class="mb-3">
+                <label class="small mb-1" for="inputEmailAddress">Предметная область</label>
+                {{ form.cur_subject }}
+            </div>
+            <div class="mb-3">
+                <label class="small mb-1" for="inputEmailAddress">Вид занятия</label>
+                {{ form.sub_type }}
+            </div>
+            <div class="mb-3">
+                <label class="small mb-1" for="inputEmailAddress">Группа студентов</label>
+                {{ form.cur_group }}
+            </div>
+            <div class="input-group-prepend d-flex justify-content-between"> 
+                <button type="submit", name="save", class="btn btn-success">Назначить учебную нагрузку</button>
+                <input type="button", onclick="history.back();", class="btn btn-warning", value="Назад">
+            </div>
+    </div>
+</form>
+{% endblock %}

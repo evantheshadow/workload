@@ -1,0 +1,124 @@
+{% extends 'main/base.html' %}
+
+{% load static %}
+{% load widget_tweaks %}
+{% load rest_framework %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+{% if work_info == None %}
+    <div class="alert alert-danger mt-4" role="alert">
+        Внимание! Ваш профиль не обладает ролью "Преподаватель", поэтому Вы не можете добавлять и изменять свои персональные данные. Пожалуйста, подайте заявку на предоставление роли "Учитель".
+    </div>
+{% elif user.is_superuser and work_info == None %}
+<div class="alert alert-warning mt-4" role="alert">
+    Внимание! Ваш профиль не обладает ролью "Преподаватель", поэтому Вы не можете добавлять и изменять свои персональные данные. Пожалуйста, создайте профиль учителя.
+</div>
+{% endif %}
+<div class="container-xl px-4 mt-4">
+    <div class="row">
+        <div class="col-xl-4">
+            <!-- Profile picture card-->
+            <div class="card mb-4 mb-xl-0">
+                <div class="card-header">Аватар</div>
+                <div class="card-body text-center">
+                    <!-- Profile picture image-->
+                    <img class="w-50 h-10" src="{% static 'images/user.png' %}">
+                    <!-- <img class="img-account-profile rounded-circle mb-2" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt=""> -->
+                    <!-- Profile picture help block-->
+                    <div class="small font-italic text-muted mb-4">Данная функция недоступна, так как находится в раннем доступе.</div>
+                    <!-- Profile picture upload button-->
+                    <!-- <button class="btn btn-primary" type="button">Загрузить изображение</button> -->
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-8">
+            <!-- Account details card-->
+            <div class="card mb-4">
+                <div class="card-header">Информация об аккаунте</div>
+                <div class="card-body">
+                    <form method="post" action="{% url 'home:myAccountInfo' %}">
+                        <!-- Form Group (username)-->
+                        {% csrf_token %}
+                        <fieldset disabled>
+                            <div class="mb-3">
+                                <!-- inputUsername -->
+                                <label class="small mb-1" for="disabledTextInput">Имя пользователя</label>
+                                <input class="form-control" name="username" id="disabledTextInput" type="text" placeholder="Введите свой никнейм" value="{% if work_info %}{{ work_info.user.username }}{% else %}{{user_info.username}}{% endif %}">
+                            </div>
+                        </fieldset>
+                        {% if isThatUserTeacher == False %} <fieldset disabled> {% endif %}
+                        <!-- Form Row-->
+                        <div class="row gx-3 mb-3">
+                            <!-- Form Group (first name)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputFirstName">Фамилия</label>
+                                <input class="form-control" name="surname" id="inputFirstName" type="text" placeholder="Введите фамилию" value="{% if work_info %}{{work_info.last_name}}{% endif %}">
+                            </div>
+
+                            <!-- Form Group (last name)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputLastName">Имя</label>
+                                <input class="form-control" name="name" id="inputLastName" type="text" placeholder="Введите имя" value="{% if work_info %}{{work_info.first_name}}{% endif %}">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="small mb-1" for="inputEmailAddress">Отчество</label>
+                            <input class="form-control" name="middle_name" id="inputEmailAddress" type="text" placeholder="Введите отчество" value="{% if work_info %}{{ work_info.middle_name }}{% endif %}">
+                        </div>
+                        <!-- Form Row        -->
+                        <div class="row gx-3 mb-3">
+                            <!-- Form Group (organization name)-->
+                            
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputOrgName">Ученая степень</label>
+                                {{ form.academ_degrees }}
+                            </div>
+                            <!-- Form Group (location)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputLocation">Должность</label>
+                                {{ form.t_jobs }}
+                            </div>
+                        </div>
+                        {% if isThatUserTeacher == False %} </fieldset> {% endif %}
+                        <!-- Form Group (email address)-->
+                        <div class="mb-3">
+                            <label class="small mb-1" for="inputEmailAddress">Электронный адрес</label>
+                            <input class="form-control" name="email" id="inputEmailAddress" type="email" placeholder="Введите электронный адрес" value="{% if work_info %}{{ work_info.user.email }}{% else %}{{user_info.email}}{% endif %}">
+                        </div>
+                        <!-- Form Row-->
+                        {% if isThatUserTeacher == False %} <fieldset disabled> {% endif %}
+                        <div class="row gx-3 mb-3">
+                            <!-- Form Group (phone number)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputPhone">Номер телефона</label>
+                                <input class="form-control" name="phone_number" id="inputPhone" type="tel" placeholder="Введите номер телефона" value="{% if work_info %}{{ work_info.phone_number }}{% endif %}">
+                            </div>
+                            <!-- Form Group (birthday)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputLocation">Место жительства</label>
+                                <input class="form-control" name="location" id="Location" type="tel" placeholder="Введите номер телефона" value="{% if work_info %}{{ work_info.location }}{% endif %}">
+                            </div>
+                        </div>
+                        <div class="mb-6">
+                            <div>{{ form.date_of_birth|as_crispy_field }}</div>
+                        </div>
+                        {% if isThatUserTeacher == False %} </fieldset> {% endif %}
+                        <!-- Save changes button-->
+                        <p style="font-size: 12px;">Пользователь создан: {{ user_info.date_joined }}</p>
+                        <p style="font-size: 12px;">Был в сети: {{ user_info.last_login }}</p>
+                        <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                        <!-- <button type="submit" class="btn-close" aria-label="Close"></button> -->
+                        <!-- <form action="{% url 'home:myAccountInfo' %}" method="post"></form>
+                            {% csrf_token %}
+                            <p>айо</p>
+                            <input type="hidden" name="username" value="{{ user_info.username }}">
+                            <button class="btn btn-primary" type="submit">Посмотреть информацию</button>
+                        </form> -->
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

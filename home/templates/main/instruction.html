@@ -1,0 +1,28 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block content %}
+<h1>Инструкция</h1>
+<h2>Что же делать в этой программе?</h2>
+<p>Главная задача данного приложения - распределение учебной нагрузки.</p>
+<br>
+<h2>Как определить учебную нагрузку кому-либо?</h2>
+<ol>
+    <img src="{% static 'images/info/get_work_1.png' %}">
+    <li>
+        <p>Необходимо зайти на страницу "Учебная нагрузка".</p>
+    </li>
+    <img style="height: 150px; width: 500px;" src="{% static 'images/info/get_work_2.png' %}">
+    <li>
+        <p>Если вы обладаете правами администратора, то нажмите на кнопку "Назначить учебную нагрузку".</p>
+    </li>
+    <img style="height: 250px; width: 500px;" src="{% static 'images/info/get_work_3.png' %}">
+    <li>
+        <p>Заполните формы.</p>
+    </li>
+    <img style="height: 230px; width: 500px;" src="{% static 'images/info/get_work_4.png' %}">
+    <li>
+        <p>После этого проверьте, что новая карточка с информацией по нагрузке добавилась.</p>
+    </li>
+</ol>
+{% endblock %}

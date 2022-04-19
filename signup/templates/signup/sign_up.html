@@ -1,0 +1,13 @@
+{% extends "main/base.html" %}
+
+{% block title %}Регистрация{% endblock %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <form method="POST" class="form-group">
+        {% csrf_token %}
+        {{ registry_form }}
+        <button type="submit" class="btn btn-success">Зарегистрироваться</button>
+        <p>Уже зарегистрированы? <a href="{% url 'login' %}">Попробуйте войти</a>.</p>
+    </form>
+{% endblock %}

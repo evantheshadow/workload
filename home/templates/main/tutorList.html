@@ -1,0 +1,51 @@
+{% extends "main/base.html" %}
+{% load rest_framework %}
+
+{% block title %}Текущий список преподавателей{% endblock %}
+
+{% block content %}
+    <h1>Список преподавателей:</h1> 
+    <div class="input-group mb-3">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">ФИО</th>
+                    <th scope="col">Имя пользователя</th>
+                    <th scope="col">Дата рождения</th>
+                    <th scope="col">Стаж</th>
+                    <th scope="col">Ученая степень</th>
+                    <th scope="col">Должность</th>
+                    <th scope="col">Кол-во свободных часов</th>
+                    <th scope="col">Осталось</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if teachers %}
+                    {% for tutor in teachers %}
+                    <tr>
+                        <th scope="row">{{ tutor.id }}</th>
+                        <td>{{ tutor.first_name }} {{tutor.middle_name }} {{ tutor.last_name }}</td>
+                        {% if tutor.user.username %}
+                            <td>{{ tutor.user.username }}</td>
+                        {% else %}
+                            <td>Нет пользователя</td>
+                        {% endif %}
+                        <td>{{ tutor.date_of_birth }}</td>
+                        <td>{{ tutor.job_exp }}</td>
+                        <td>{{ tutor.academic_degree.name }}</td>
+                        <td>{{ tutor.teacher_job.name }}</td>
+                        <td>{{ tutor.teacher_job.num_of_hours }} ч.</td> 
+                        <td>{{ tutor.rest_free_time }} ч.</td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <p>Нет информации.</p>
+                {% endif %}
+            </tbody>
+        </table>   
+    </div>
+    {% if user.is_superuser %}
+        <input type="button", onclick="window.location.href='{% url 'home:createTutor' %}'", class="btn btn-primary", value="Создать">
+    {% endif %}
+{% endblock %}
